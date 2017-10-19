@@ -29,11 +29,11 @@ public class MyHashEntry <T,E> {
 	public String toString(){
 		StringBuilder sb = new StringBuilder("[");
 		MyHashEntry<T,E> pointer = this;
-		sb.append("("+pointer.getKey()+","+pointer.getValue()+")");
+		sb.append(pointer.getKey()+"="+pointer.getValue());
 		while (pointer.getNext() != null){
 			pointer = pointer.getNext();
 			sb.append(",");
-			sb.append("("+pointer.getKey()+","+pointer.getValue()+")");
+			sb.append(pointer.getKey()+"="+pointer.getValue());
 		}
 		sb.append("]");
 		return sb.toString();
