@@ -7,16 +7,18 @@ import java.util.Map.Entry;
 public class SecondarySortCards {
 	public static void main(String[] args) {
 		int[] card = new int[10];
+		//Generate 10 cards randomly
 		for(int i=0;i<10;i++){
 				card[i]=(int)(Math.random()*13);
 			while (card[i]==0){
 				card[i]=(int)(Math.random()*13);
 			}
 		}
+		//print the sorted result
 		System.out.println(Arrays.toString(sortCards(card)));
 	}
 	public static String[] sortCards(int[] args) {
-		//put into HashMap
+		//put into HashMap to count the same card repeat times
 		HashMap<Integer,Integer> hm = new HashMap<Integer,Integer>();
 		for (int s:args){
 			if (hm.containsKey(s)){
@@ -26,19 +28,19 @@ public class SecondarySortCards {
 				hm.put(s, 1);
 			}
 		}
-		//Sort
+		//Sort using bubble sort method
 		Entry<Integer,Integer>[] sortedEntry = bubbleSort(hm);
 		//Transform back into String array
 		String[] s = new String[10];
 		int c=0;
 		for (Entry<Integer,Integer> entry : sortedEntry){
 			for (int i=0;i<entry.getValue();i++){
+				//use getCardName() to transform card values like 11,12 to card names like J, Q
 				s[c]=getCardName(entry.getKey());
 				c++;
 			}
 		}
 		return s;
-		
 	}
 	public static String getCardName (int cardVal){
 		//Transform the card of which value is 1,11,12, or 13 to A, J, Q, or K correspondingly
