@@ -3,6 +3,8 @@ package jobsearching;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class SecondarySortCards {
 	public static void main(String[] args) {
@@ -15,12 +17,13 @@ public class SecondarySortCards {
 			}
 		}
 //		print the sorted result
-		System.out.println(Arrays.toString(sortCards(card)));
+		System.out.println(Arrays.toString(bubbleSort(card)));
+		System.out.println(Arrays.toString(treeSort(card)));
 	}
-	public static String[] sortCards(int[] args) {
+	public static HashMap<Integer,Integer> countCards(int[] cards){
 //		put into HashMap to count the same card repeat times
 		HashMap<Integer,Integer> hm = new HashMap<Integer,Integer>();
-		for (int s:args){
+		for (int s:cards){
 			if (hm.containsKey(s)){
 				int value = hm.get(s) + 1;
 				hm.put(s, value);
@@ -28,19 +31,7 @@ public class SecondarySortCards {
 				hm.put(s, 1);
 			}
 		}
-//		Sort using bubble sort method
-		Entry<Integer,Integer>[] sortedEntry = bubbleSort(hm);
-//		Transform back into String array
-		String[] s = new String[10];
-		int c=0;	//the index of the returned String array
-		for (Entry<Integer,Integer> entry : sortedEntry){
-			for (int i=0;i<entry.getValue();i++){
-//				use getCardName() to transform card values like 11,12 to card names like J, Q
-				s[c]=getCardName(entry.getKey());
-				c++;
-			}
-		}
-		return s;
+		return hm;
 	}
 	public static String getCardName (int cardVal){
 //		Transform the card of which value is 1,11,12, or 13 to A, J, Q, or K correspondingly
@@ -57,9 +48,31 @@ public class SecondarySortCards {
 			return Integer.toString(cardVal);
 		}
 	}
-	public static Entry<Integer,Integer>[] bubbleSort(HashMap<Integer,Integer> hashMap){
+	public static String[] treeSort(int[] args){
+//		count cards
+		HashMap<Integer,Integer> hm = countCards(args);
+//		new a treeset for sorting since treeset is sorted set
+		Set<CustomizedKey> set = new TreeSet<CustomizedKey>();
+		for (Entry<Integer,Integer> e: hm.entrySet()){
+			set.add(new CustomizedKey(e.getKey(),e.getValue()));
+		}
+		String[] sorted = new String[10];
+		int i=0;
+//		pull every element out to the String array, it is naturally sorted
+		for (CustomizedKey ck : set){
+			for (int j=0;j<ck.getCount();j++){
+				sorted[i] = getCardName(ck.getCardVal());
+				i++;
+			}
+		}
+		return sorted;
+		
+	}
+	public static String[] bubbleSort(int[] args){
+//		count cards
+		HashMap<Integer,Integer> hashMap = countCards(args);
 //		Get the size of the HashMap. since duplicated cards exisits,
-//		the size -- the number of entries is often less then 10 -- the number of cards
+//		the size (the number of entries) is often less then 10 -- the number of cards
 		int size = hashMap.entrySet().size();
 //		get a new Entry array
 		Entry<Integer,Integer>[] entry = new Entry[size];
@@ -86,6 +99,16 @@ public class SecondarySortCards {
 				}
 			}
 		}
-		return entry;
+//		Transform back into String array
+		String[] s = new String[10];
+		int c=0;	//the index of the returned String array
+		for (Entry<Integer,Integer> e : entry){
+			for (int x=0;x<e.getValue();x++){
+//				use getCardName() to transform card values like 11,12 to card names like J, Q
+				s[c]=getCardName(e.getKey());
+				c++;
+			}
+		}
+		return s;
 	}
 }
